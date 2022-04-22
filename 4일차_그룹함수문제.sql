@@ -9,6 +9,18 @@ select job,max(salary) 최고액, min (salary) 최저액, sum(salary) 총액, round(avg(
 from employee
 group by job;
 
+-- rollup cubd : group by 절에서 사용하는 특수한 키워드. 
+select job,max(salary) 최고액, min (salary) 최저액, sum(salary) 총액, round(avg(salary)) 평균
+from employee
+group by cube(job) 
+order by job;
+
+-- 두개 이상의 컬럼을 그룹핑
+select dno, job, count(*), max(salary) 최고액, min (salary) 최저액, sum(salary) 총액, round(avg(salary)) 평균
+from employee
+group by cube(dno, job) -- 두개 이상의 컬럼을 그룹핑: 두 컬럼이 모두 만족될 때 그룹핑
+order by dno;
+
 -- 3. count(*)함수를 사용하여 담당 업무가 동일한 사원수를 출력하시오. 
 select job, count(*) || '명' as 사원수
 from employee
