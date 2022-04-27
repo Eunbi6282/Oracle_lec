@@ -185,3 +185,4 @@
     commit;
     
     drop table member;
+    
