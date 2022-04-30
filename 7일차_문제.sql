@@ -48,10 +48,11 @@
         --새로 생성된 테이블의 컬럼명은 각각 EMP_ID, NAME, SAL, DEPT_ID 로 지정 하시오. 
     create table employee2
     as
-    select ename as "EMP_ID", ename  as NAME, salary as SAL, dno as "DEPT_ID"
+    select eno as "EMP_ID", ename  as NAME, salary as SAL, dno as "DEPT_ID"
     from employee;
     
     select * from employee2;
+    drop table employee2;
 
 -- 5. EMP 테이블을 삭제 하시오. 
     drop table emp;
@@ -62,6 +63,9 @@
 -- 7. DEPT 테이블에서 DNAME 컬럼을 제거 하시오
     alter table dept 
     drop column dname;
+    
+    -- 실제 운영하는 시스템에서는 레코드가 굉장히 많이 들어가 있음. 컬럼 제거 시 부하가 많이 발생된다. (야간시간에 제거하도록 -> 
+        -- 업무시간엔 unused 로 해두기
     
     desc dept;
     
@@ -81,21 +85,35 @@
 -- 1. EMP 테이블의 구조만 복사하여 EMP_INSERT 란 이름의 빈 테이블을 만드시오. 
     create table emp_insert
     as
-    select * from employee
+    select * from emp
     where 0 = 1; -- false를 리턴
+    
+    drop table emp_insert;
     
     select * from emp_insert;
     desc emp_insert;
+    desc emp;
 
 -- 2. 본인을 EMP_INSERT 테이블에 추가하되 SYSDATE를 이용해서 입사일을 오늘로 입력하시오. 
-    insert into emp_insert 
-    values(1111,'eunbi','student',2233,sysdate,2800,null,10);
-    select * from emp_insert;
-    commit;
+  
+    -- 컬럼 추가, 컬럼 추가 시 주의사항(NUll을 허용하도록)
+    alter table emp_insert
+    add hiredate date;
+    
+    -- insert하기 전 테이블 구조 보기
+    desc emp_insert;
 
+    -- insert
+    insert into emp_insert (eno, ename, salary, dno, hiredate)
+    values(1111, 'eunbi', 2800, 10, sysdate);
+    
+    commit;
+    
+    
+    
 -- 3. EMP_INSERT 테이블에 옆 사람을 추가하되 TO_DATE 함수를 이용해서 입사일을 어제로 입력하시오. 
     insert into emp_insert 
-    values(2222,'mimi','student',2233,to_date('22-04-25','YY-MM-DD'),2800,null,10);
+    values(2222,'mimi','student',2233,to_date(sysdate -1),2800,null,10);
     select * from emp_insert;
     commit;
 
