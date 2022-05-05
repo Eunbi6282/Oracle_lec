@@ -71,6 +71,7 @@ end;
     
     */
     
+    -- 연봉계산
     set serveroutput on
     declare   
         v_employee employee%rowtype;    -- %rowtype : 테이블의 모든 컬럼의 자료형을 참조해서 사용. 
@@ -94,7 +95,7 @@ end;
     end;
     /
     
-     set serveroutput on
+    set serveroutput on
     declare   
         v_employee employee%rowtype;    -- %rowtype : 테이블의 모든 컬럼의 자료형을 참조해서 사용. 
             -- v_employee 변수는 employee테이블의 모든 컬럼을 참조
@@ -207,6 +208,8 @@ end;
         dbms_output.put_line(v_employee.eno || '     ' || v_employee.ename || '       ' || v_employee.salary || '      ' || v_employee.dno);
     end;
     /
+    
+    --------------------------------------------------------------------------------------
         
 /* 커서(cursor) : PL SQL에서 select한 결과가 단일 레코드가 아니라 레코드 셋인 경우에 커서가 필요하다. 
 
@@ -264,60 +267,117 @@ end;
         
 */
 -- 개별 타입
- set serveroutput on
- declare 
-    v_ename employee.ename%type;
-    v_dname department.dname%type;
-    v_loc department.loc%type;
-    v_salary employee.salary%type;
-    
-    cursor c1
-    is
-    select ename, dname, loc,salary
-    from employee e, department d
-    where e.dno = d.dno;
-begin
-    dbms_output.put_line ('사원명      부서명     위치      월급');
-    dbms_output.put_line ('------------------------------');
-    
-    -- 커서 오픔
-    open c1;
-    loop 
-        fetch c1 into v_ename, v_dname, v_loc, v_salary;
-        exit when c1%notfound;
-        dbms_output.put_line(v_ename || '        ' || v_dname || '      ' || v_loc || '     ' || v_salary);
-    end loop;
-    -- 커서종료
-    close c1;
-end;
-/
+     set serveroutput on
+     declare 
+        v_ename employee.ename%type;
+        v_dname department.dname%type;
+        v_loc department.loc%type;
+        v_salary employee.salary%type;
+        
+        cursor c1
+        is
+        select ename, dname, loc,salary
+        from employee e, department d
+        where e.dno = d.dno;
+    begin
+        dbms_output.put_line ('사원명      부서명     위치      월급');
+        dbms_output.put_line ('------------------------------');
+        
+        -- 커서 오픔
+        open c1;
+        loop 
+            fetch c1 into v_ename, v_dname, v_loc, v_salary;
+            exit when c1%notfound;
+            dbms_output.put_line(v_ename || '        ' || v_dname || '      ' || v_loc || '     ' || v_salary);
+        end loop;
+        -- 커서종료
+        close c1;
+    end;
+    /
 
 -- row type
-set serveroutput on
-declare
-    v_emp employee%rowtype;
-    v_dept department%rowtype;
+    set serveroutput on
+    declare
+        v_emp employee%rowtype;
+        v_dept department%rowtype;
+        
+        cursor c2
+        is
+        select ename, dname, loc, salary
+        from employee e, department d
+        where e.dno = d.dno;
     
-    cursor c2
-    is
-    select ename, dname, loc, salary
-    from employee e, department d
-    where e.dno = d.dno;
+    begin
+        dbms_output.put_line ('사원명      부서명     위치      월급');
+        dbms_output.put_line ('------------------------------');
+        
+        open c2;
+        
+        loop
+            fetch c2 into v_emp.ename, v_dept.dname, v_dept.loc, v_emp.salary;
+            exit when c2%notfound;
+            dbms_output.put_line(v_emp.ename || '        ' || v_dept.dname || '      ' ||  v_dept.loc || '     ' || v_emp.salary);
+        end loop;
+        
+        close c2;
+    end;
+    /
 
-begin
-    dbms_output.put_line ('사원명      부서명     위치      월급');
-    dbms_output.put_line ('------------------------------');
+/* cursor for loop 문으로 커서를 사용해서 여러 레코드셋 출력하기 
+    - opne과 close를 생략해서 사용
+    - 한 테이블의 전체 내용을 출력할 때 사용
     
-    open c2;
+*/
+    set serveroutput on
+    declare
+        v_dept department%rowtype;
+        cursor c1
+        is 
+        select * from department;
+    begin
+        dbms_output.put_line ('부서번호     부서명     지역명');
+        dbms_output.put_line ('------------------------------');
+        for v_dept in c1 loop       --for in loop <open, close 필요 없음>
+            dbms_output.put_line(v_dept.dno || '        ' || v_dept.dname || '      ' ||  v_dept.loc);
+        end loop;
+    end;
+    /
+    select * from employee;
     
-    loop
-        fetch c2 into v_emp.ename, v_dept.dname, v_dept.loc, v_emp.salary;
-        exit when c2%notfound;
-        dbms_output.put_line(v_emp.ename || '        ' || v_dept.dname || '      ' ||  v_dept.loc || '     ' || v_emp.salary);
-    end loop;
+    -- empoloyee 테이블의 모든 내용을 cursor for loop를 사용해서 출력
+    set serveroutput on 
+    declare
+        v_emp employee%rowtype;
+        
+        cursor c2
+        is 
+        select * from employee;
+    begin
+        for v_emp in c2 loop
+            dbms_output.put_line(v_emp.eno || '        ' || v_emp.ename || '      ' || v_emp.job || '       ' || v_emp.manager
+            || '       ' || v_emp.hiredate || '       ' || v_emp.salary || '       ' || v_emp.commission|| '       ' || v_emp.dno);
+        end loop;
+    end;
+    /
     
-    close c2;
-end;
-/
+    -- employee 테이블의 사원번호, 사원명, 월급을 출력.월급이 2000인 사람 and 부서가 20번, 30번인 사원들 출력/ cursor for loop
+    set serveroutput on
+    declare
+        v_emp employee%rowtype;
+        
+        cursor c3
+        is 
+        select eno, ename, salary
+        from employee
+        where salary >= 2000 and dno in( 20, 30);
+    begin
+        dbms_output.put_line ('사원번호      사원명        월급');
+        dbms_output.put_line ('------------------------------');
+        for v_emp in c3 loop
+            dbms_output.put_line (v_emp.eno || '      ' || v_emp.ename || '       ' || v_emp.salary);
+        end loop;
+    end;
+    /
 
+    
             
