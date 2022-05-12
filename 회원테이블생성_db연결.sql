@@ -28,6 +28,7 @@ values (seq_mbTbl_idx.nextval,'admin', '1234', '관리자' , 'kosmo@kosmo.com','Seo
 
 Insert into mbTbl (idx ,id , pass, name, email) values (seq_mbTbl_idx.nextval, '" + id + "','" + passwd + "','" + name + "','" + email + "')";
 
+Update mbTbl set name = '박은비', email = 'gyugyu@naver.com' where id = 'ABCD'
 
 
 
