@@ -15,7 +15,7 @@ Create or replace table freeboard (
     );
     
 select * from freeboard
-order by id;
+order by id desc;
 
 Insert into freeboard (id, name, password, email, subject, content, inputdate, masterid, readcount, replynum , step) 
 values (1,'ddddd','1234', 'ddd','dd','ddddd ddd d d d d','22-00-11 12:00 오후',1,0,0,0);
@@ -23,6 +23,14 @@ values (1,'ddddd','1234', 'ddd','dd','ddddd ddd d d d d','22-00-11 12:00 오후',1
 Insert into freeboard (id, name, password, email, subject, content, inputdate, masterid, readcount, replynum, step) 
 values (?,?,?,?,?,?,?,?,?,?,?) ;
 desc freeboard;
+
+Insert into freeboard (id, name, password, email, subject, content, inputdate, masterid, readcount, replynum , step) 
+values (43,'홍길동5','1234', 'eunbi628268@gmail.com','제목5','내용 1 ''내용2'' 내용 5 ','22-05-13 11:54 오전',34,0,0,1);
+
+commit;
+
+select * from freeboard 
+where name like '%가나다%' or subject like '%가나다%' or content like '%가나다%' order by id desc;
 -------------------------페이징 처리 쿼리---------------------------------------------
 
 -- !! 답변글이 존재하는 테이블을 출력할 때 반드시 세 컬럼을 masterid desc, replynum, step, id 이렇게 가져와야 함!!
