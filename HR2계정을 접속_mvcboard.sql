@@ -32,3 +32,26 @@ insert into mvcboard (idx, name, title, content, pass)
 values( seq_board_num.nextval, '대조영', '자료실 제목5입니다.', '내용5', '1234');
 
 commit;
+
+-- DB에서 특정 레코드만 출력할 때 
+
+SELECT * FROM ( 		
+    SELECT Tb.*, ROWNUM rNUM FROM ( 
+        SELECT * FROM mvcboard 	ORDER BY idx DESC ) Tb )  
+        WHERE rNUM BETWEEN 1 AND 2;
+        
+select * from (
+    select tb.*, rownum rNum from (
+        select * from mvcboard order by idx desc) tb ); --select * from mvcboard order by idx desc 테이블 이름을 tb라고 알리아스 시킴
+
+-- 검색기능을 사용했을 때
+
+SELECT * FROM (
+    SELECT Tb.*, ROWNUM rNUM FROM ( 			
+        SELECT * FROM mvcboard  WHERE title LIKE '%제목2%' 		ORDER BY idx DESC ) Tb )  
+        WHERE rNUM BETWEEN ? AND ?;
+        
+select count(*) from mvcboard
+where pass = '1234' and idx = 1;
+
+select * from mvcboard;
