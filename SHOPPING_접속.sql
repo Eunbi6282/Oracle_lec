@@ -15,11 +15,12 @@ create table product (
 
 create table member (
     id varchar2(10) not null primary key, 
-    pass varchar2(20) not null,
+    email varchar2(20) not null,
     name varchar2(20) not null,
-    regidate date default sysdate not null,
+    pass varchar2(20) not null,
     address varchar2(500) not null,
-    email varchar2(20) not null
+    tel varchar2(20) not null,
+    regidate date default sysdate not null
     );
 select * from member;
 
@@ -36,6 +37,8 @@ create table saleorder(
 );
 
 drop table board;
+drop table member;
+drop table product;
 
 create sequence seq_board_peb
     increment by 1
@@ -73,5 +76,13 @@ insert into board ( num, id, name, title,content ,postdate, downcount, pass, vis
 values (seq_board_peb.nextval,'201700','박은', '가나다라', '내용' , default, default,'1234', default); 
 
 insert into member
-values ('20170033', '1234', '박은비', default, '서울특별시', 'eun628268@gmail.com');
+values ('20170033','eun628268@gmail.com', '박은비','1234','서울특별시', '010-2055-6282' , default);
+
+insert into member
+values ('20170044', '6282eun@naver.com', '김은비','1234','경기도', '010-3333-6282' , default);
+
+
+
 commit;
+
+ALTER TABLE board DROP CONSTRAINT BOARD_ID_FK CASCADE;

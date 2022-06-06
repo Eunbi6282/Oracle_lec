@@ -13,3 +13,5 @@ select * from member02;
 insert into member02 values('admin@kosmo.com' , '1234' , '관리자', default, '서울', '010-1111-1111', sysdate);
 insert into member02 values('hong@kosmo.com' , '1234' , '홍길동', default, '경기도', '010-2222-2222', sysdate);
 commit;
+
+SELECT u_id FROM member02 WHERE u_id = 'admin@naver.com';
