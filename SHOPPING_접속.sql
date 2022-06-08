@@ -1,5 +1,5 @@
 create table product (
-    id number(10) primary key,
+    p_id number(10) primary key,
     category varchar2(10) not null,
     wname		varchar2(20) not null,
     pname		varchar2(20) not null,
@@ -9,10 +9,14 @@ create table product (
     inputdate	varchar2(20) default sysdate,
     stock		number(10) default 0,
     description	varchar2(2000),
-    small		varchar2(20),
-    large		varchar2(20)
+    pImg		varchar2(20)
 );
+select *from product;
+insert into product values (20170033,'TOP','박은비','라룸 반팔', '라룸', 30000,25000,default, 33,'라룸 단독 반팔 T', '라룸_베이직T');
 
+select sysdate from product;
+
+-- 회원 회원가입
 create table member (
     id varchar2(10) not null primary key, 
     email varchar2(20) not null,
@@ -22,8 +26,12 @@ create table member (
     tel varchar2(20) not null,
     regidate date default sysdate not null
     );
+    
+-- 관리자 로그
 select * from member;
-
+insert into member
+values ('qkrdmsql1','eun628268@gmail.com', '박은비','1234','서울특별시', '010-2055-6282' , default);
+commit;
 create table saleorder(
     id		number(10) primary key,
     name		varchar2(20) not null,
@@ -76,12 +84,12 @@ insert into board ( num, id, name, title,content ,postdate, downcount, pass, vis
 values (seq_board_peb.nextval,'201700','박은', '가나다라', '내용' , default, default,'1234', default); 
 
 insert into member
-values ('20170033','eun628268@gmail.com', '박은비','1234','서울특별시', '010-2055-6282' , default);
+values ('qkrdmsql','eun628268@gmail.com', '박은비','1234','서울특별시', '010-2055-6282' , default);
 
 insert into member
-values ('20170044', '6282eun@naver.com', '김은비','1234','경기도', '010-3333-6282' , default);
+values ('rkskek', '6282eun@naver.com', '김은비','1234','경기도', '010-3333-6282' , default);
 
-
+delete from member where pass = '1234';
 
 commit;
 
