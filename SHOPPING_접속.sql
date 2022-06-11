@@ -26,6 +26,9 @@ select * from board;
 alter table board
 add constraint BOARD_ID_FK Foreign Key (id) REFERENCES member(id);
 
+alter table board
+add constraint BOARD_Pass_FK Foreign Key (pass) REFERENCES member(pass);
+
 desc board;
 
 select * from user_constraints
