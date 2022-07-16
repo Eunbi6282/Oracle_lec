@@ -19,3 +19,5 @@ ORDER BY F_CODE ;
 
 select * from festival where  '2022-05-01' < F_STARTDATE ORDER BY F_STARTDATE ;
 
+
+select f_code, f_nx, f_ny from festival order by f_code;
